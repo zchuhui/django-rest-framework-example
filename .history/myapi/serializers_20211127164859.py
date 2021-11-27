@@ -18,6 +18,3 @@ class CompanySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Company
         fields = ('id','name','address','city','official_website')
-
-
-
