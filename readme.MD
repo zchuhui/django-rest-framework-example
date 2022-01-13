@@ -1,5 +1,7 @@
 # Django-rest-framework 快速上手
 
+![image info](./images/logo.png)
+
 # 启动
 
 1、进入虚拟环境
@@ -215,6 +217,6 @@ urlpatterns = [
 ]
 ```
 
-搞定，然后 `python manage.py runserver` 启动一下，访问：`http://127.0.0.1:8000/myapi/` 即可
-
-完成。
+搞定，然后 `python manage.py runserver` 启动一下，访问：`http://127.0.0.1:8000/myapi/` 即可。  
+效果如下：
+![image info](./images/demo_1.png)
