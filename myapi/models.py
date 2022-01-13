@@ -21,3 +21,6 @@ class Company(models.Model):
     city = models.CharField(max_length=60)
     fields = models.CharField(max_length=60)
     official_website = models.CharField(max_length=1000)
+    
+    def __str__(self):
+        return self.name
