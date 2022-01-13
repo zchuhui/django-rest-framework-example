@@ -127,7 +127,7 @@ admin.site.register(Company)
 
 # 使用 Django REST Framework
 
-## 安装 && 配置
+## 1. 安装 && 配置
 
 目前为止，Django 最火的 rest 框架还是 `djangorestframework`，安装：
 
@@ -148,4 +148,73 @@ INSTALLED_APPS = [
 教程地址：
 [Build a REST API in 30 minutes with Django REST Framework](https://medium.com/swlh/build-your-first-rest-api-with-django-rest-framework-e394e39a482c)
 
+## 2. 应用到项目
 
+### 2.1 序列化 model
+
+在新建的项目下新建 `serializers.py` 文件,并编辑：
+
+```py
+from rest_framework import serializers   # 1. 导入 rest_framework
+from .models import Company              # 2. 导入 model
+
+
+class CompanySerializer(serializers.HyperlinkedModelSerializer):
+    '''
+        3. 系列化 Company model 
+    '''
+    class Meta:
+        model = Company
+        fields = ('id','name','address','city','official_website')
+
+
+```
+
+### 2.2 页面视图
+
+系列化后，需要在页面展示出来，这个时候就在目录的 `myapi/views.py` 编写：
+
+```py
+from rest_framework import viewsets 
+from .serializers import CompanySerializer
+from .models import Company
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all().order_by('name')
+    serializer_class = CompanySerializer
+
+```
+
+### 2.3 路由
+
+在目录下新建 `myapi/urls.py` 文件，添加：
+
+```py
+from django.urls import include, path
+from rest_framework import routers
+from . import views
+
+router = routers.DefaultRouter()
+router.register(r'company', views.CompanyViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]
+```
+
+然后，在主项目下的 `mysite/urls.py` 新增新的模块：
+
+```py
+from django.contrib import admin
+from django.urls import path,include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('myapi/', include('myapi.urls')),
+]
+```
+
+搞定，然后 `python manage.py runserver` 启动一下，访问：`http://127.0.0.1:8000/myapi/` 即可
+
+完成。
